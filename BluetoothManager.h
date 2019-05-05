@@ -6,7 +6,6 @@
 //  Copyright © 2017 Justin Kaufman. All rights reserved.
 //
 
-
 #ifndef _BLUETOOTHMANAGER_H
 #define _BLUETOOTHMANAGER_H
 
@@ -37,9 +36,7 @@
 #define PHONE_IN_CALL       2
 #define PHONE_RINGING       3
 
-
 class BluetoothManager: public Runnable {
-  
   public:
     BluetoothManager(HardwareSerial2 *ser);
 
@@ -94,7 +91,6 @@ class BluetoothManager: public Runnable {
   public:
     friend class SerialManager;
 
-
     void    handleMessage(String msg);
     void    clear();
     String  sendMessage(String msg, uint8_t timeout);
@@ -102,9 +98,7 @@ class BluetoothManager: public Runnable {
 
     
   public:
-
     void unitTest();
-
 
     btResult reset();
     btResult restore();
@@ -130,14 +124,6 @@ class BluetoothManager: public Runnable {
     btResult stdSetParam(String command, String param);
     btResult stdCmd(String command);
     btResult connectionState();
-
 };
 
 #endif
-
-
-
-
-
-
-

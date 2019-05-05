@@ -9,7 +9,7 @@
 #ifndef _GLOBALS_H
 #define _GLOBALS_H
 
-#include <Arduino.h>
+// #include <Arduino.h>
 
 // Debugger
 #define DEBUG                     1
@@ -105,10 +105,3 @@ extern prog_uchar                 glowdeck_icon[1742];
   
 
 #endif
-
-
-
-
-
-
-

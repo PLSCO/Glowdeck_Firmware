@@ -8,16 +8,13 @@
 
 #include "BluetoothManager.h"
 
-
 extern GlowdeckManager      glowdeckManager;
 extern BootloaderManager    bootloaderManager;
 extern SerialManager        serialManager;
 extern LEDManager           ledManager;
 extern DisplayManager       displayManager;
 
-
 BluetoothManager::BluetoothManager(HardwareSerial2 *ser) {
-  
   this->bt = btle;
   
   recvPrefixLength = 8;
@@ -45,179 +42,107 @@ BluetoothManager::BluetoothManager(HardwareSerial2 *ser) {
   
 }
 
-
 void BluetoothManager::setup() {
   memset(recvBuffer, 0, sizeof(recvBuffer));
   recvProcess = "";
   clear();
 
   // send("VERSION");
-  
 }
 
 void BluetoothManager::loop() {
-
   if (bt.getCommandCount()) {
-  
     memset(recvBuffer, 0, sizeof(recvBuffer));
     
     while (bt.getCommandCount()) {
-      
       bt.pullCommand(recvBuffer);
-      
       recvProcess = (char*)recvBuffer;
-      
       memset(recvBuffer, 0, sizeof(recvBuffer));
-
       // main.println(recvProcess);
       
       if (recvProcess.contains("RECV ")) {
-        
         if (!recvProcess.contains("^")) {
-
           if (recvProcess.length() >= (unsigned)(recvPrefixLength + 19)) {
-
             String appended;
 
             if (nextGen) {
-              
               String tempProcess = recvProcess.substring(recvPrefixLength, recvProcess.length());
-              
               appended = tempProcess.substring(tempProcess.indexOf(" ") + 1, tempProcess.length());
-              
-            }
-            else {
-              
+            } else {
               appended = recvProcess;
-              
             }
             
             recvProcess = "";
-           
             appended.trim();
-            
             unsigned long st = millis();
             
             while (millis() - st < 5000) {
-              
               if (bt.getCommandCount()) {
-                
                 bt.pullCommand(recvBuffer);
-                
                 recvProcess = (char*)recvBuffer;
-                
                 memset(recvBuffer, 0, sizeof(recvBuffer));
                 
                 if (recvProcess.contains("RECV ")) {
-                  
                   uint8_t len = recvProcess.length();
 
                   if (nextGen) {
-
                     String temp = recvProcess.substring(recvPrefixLength, len);
-
                     appended = appended + temp.substring(temp.indexOf(" ") + 1, temp.length());
-                    
-                  }
-                  else {
-                  
+                  } else {
                     appended = appended + recvProcess.substring(recvPrefixLength, len);
-                  
                   } 
                                   
                   recvProcess = "";
-                  
                   appended.trim();
                   
                   if (appended.contains("^")) {
-                    
                     recvProcess = appended;
-                    
                     appended = "";
-                    
                     break;
-  
                   }
-                  
                 }    
-                
               }
-              
             }
-            
-          }
-          else {
-
+          } else {
             if (nextGen) {
-
               String temp = recvProcess.substring(recvPrefixLength, recvProcess.lastIndexOf("^") + 1);
-              
               recvProcess = temp.substring(temp.indexOf(" ") + 1, temp.length());
-
-            }
-            else {
-
+            } else {
               recvProcess = recvProcess.substring(recvPrefixLength, recvProcess.lastIndexOf("^") + 1);
-              
             }
             
             recvProcess.trim();
-           
             handleMessage(recvProcess);
-
             recvProcess = "";
-                        
+
             if ((bt.checkListOverflow()) || (bt.checkCharOverflow())) bt.resetCommandList();
-                        
             continue;
-            
           }
-          
-        }
-
-        else {
-
+        } else {
           if (nextGen) {
-
             String temp = recvProcess.substring(recvPrefixLength, recvProcess.length());
-            
             recvProcess = temp.substring(temp.indexOf(" ") + 1, temp.length());
-
-          }
-          else {
-
+          } else {
             recvProcess = recvProcess.substring(recvPrefixLength, recvProcess.length());
-            
           }
           
           recvProcess.trim();
-         
           handleMessage(recvProcess);
-
           recvProcess = "";
                       
           if ((bt.checkListOverflow()) || (bt.checkCharOverflow())) bt.resetCommandList();
-
           continue;
-          
-        }
-        
+        }  
       }
      
       handleMessage(recvProcess);
-      
       recvProcess = "";
-      
-      if ((bt.checkListOverflow()) || (bt.checkCharOverflow())) bt.resetCommandList();
-      
-      continue;
-      
-    }
-  
-  }
-   
-}
 
+      if ((bt.checkListOverflow()) || (bt.checkCharOverflow())) bt.resetCommandList();
+      continue;
+    }
+  }
+}
 
 void BluetoothManager::clear() {
   bt.flush();
@@ -232,7 +157,6 @@ void BluetoothManager::clear() {
 }
 
 void BluetoothManager::handleMessage(String msg) {
-
   if ((msg == " ") || (msg.length() < 2)) return;
 
   #if defined DEBUG
@@ -320,7 +244,6 @@ String BluetoothManager::send(String raw) {
 
   return "SENT";
 }
-
 
 void BluetoothManager::unitTest() {
   

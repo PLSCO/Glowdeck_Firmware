@@ -9,7 +9,6 @@
 #include "BootloaderManager.h"
 #include "EEPROM.h"
 
-
 extern SerialManager serialManager;
 
 BootloaderManager::BootloaderManager() {
@@ -17,7 +16,6 @@ BootloaderManager::BootloaderManager() {
 }
 
 void BootloaderManager::enterBootloaderMode() {
-
   // Writing 13 to address 0 causes MCU to enter bootloader mode on startup...
   EEPROM.write(0, 13);
 
@@ -29,12 +27,4 @@ void BootloaderManager::enterBootloaderMode() {
 
   // Reboot the MCU...
   CPU_RESTART;
-
 }
-
-
-
-
-
-
-
