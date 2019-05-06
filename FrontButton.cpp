@@ -29,11 +29,3 @@ void FrontButton::longClick() {
   // SerialManager::logEvent("FrontButton::longClick()");
   serialManager.logEvent("FrontButton::longClick()");
 }
-
-
-
-
-
-
-
-

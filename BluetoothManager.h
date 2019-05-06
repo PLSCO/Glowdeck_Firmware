@@ -44,7 +44,6 @@ class BluetoothManager: public Runnable {
     void loop();
 
   public:
-
     // Connection types
     enum profiles { SPP, BLE, A2DP, HFP, AVRCP, PBAP, MAP, ANY };
 
@@ -96,7 +95,6 @@ class BluetoothManager: public Runnable {
     String  sendMessage(String msg, uint8_t timeout);
     String  send(String raw);
 
-    
   public:
     void unitTest();
 

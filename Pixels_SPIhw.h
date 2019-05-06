@@ -265,11 +265,3 @@ void SPIhw::setSPIClockDivider(uint8_t rate)
     SPSR = (SPSR & ~SPI_2XCLOCK_MASK) | ((rate >> 2) & SPI_2XCLOCK_MASK);
 }
 #endif
-
-
-
-
-
-
-
-

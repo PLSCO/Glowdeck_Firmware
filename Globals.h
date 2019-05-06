@@ -9,17 +9,15 @@
 #ifndef _GLOBALS_H
 #define _GLOBALS_H
 
-// #include <Arduino.h>
+#include <Arduino.h>
 
 // Debugger
 #define DEBUG                     1
-
 
 // Bootloader
 #define CPU_RESTART_ADDR          (uint32_t *)0xE000ED0C
 #define CPU_RESTART_VAL           0x5FA0004
 #define CPU_RESTART               (*CPU_RESTART_ADDR = CPU_RESTART_VAL);
-
 
 // Display
 #define LCD_CS                    20                              // CHIP SELECT
@@ -29,10 +27,8 @@
 #define LCD_RST                   5                               // RESET
 #define LCD_BL                    6                               // BACKLIGHT PWM
 
-
 // Ambient Sensor
 #define AMB_LEVEL                 13                              // AMBIENT LIGHT SENSOR
-
 
 // Lights
 #define LED_PIN                   23                              // DATA IN
@@ -47,28 +43,23 @@
 #define FADE_IN_SPEED             22
 #define FADE_OUT_SPEED            20
 
-
 // Coils
 #define COILS                     12                              // CHARGING SENSOR
 #define COIL_PW                   15                              // COIL SWITCH
-
 
 // Buttons
 #define LEFT_BUTTON               24                              // LEFT BUTTON
 #define RIGHT_BUTTON              25                              // RIGHT BUTTON
 #define FRONT_BUTTON              26                              // FRONT BUTTON
 
-
 // Amp
 #define AMP                       22                              // AMPLIFIER SWITCH
 #define AUDIO_L                   3                               // AUDIO ANALOG-IN LEFT
 #define AUDIO_R                   0                               // AUDIO ANALOG-IN RIGHT
 
-
 // Wifi
 #define WIFI_RESTORE              7                               // FACTORY RESTORE
 #define WIFI_RESET                8                               // RESET SWITCH
-
 
 // Bluetooth
 #define PIO0                      27                              // VOLUME UP
@@ -77,20 +68,16 @@
 #define PIO4                      30                              // MUSIC BACKWARD
 #define PIO5                      31                              // MUSIC FORWARD
 
-
 // USB Detect
 #define USB_IN                    16                              // DETECT MICRO-USB PLUG
-
 
 // Ports
 #define main                      Serial                          // FREESCALE MK20DX256 MCU
 #define wifi                      Serial1                         // USR-WIFI232-T WIFI MODULE
 #define btle                      Serial2                         // BC127 BLUETOOTH MODULE
 
-
 // Miscellaneous
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
-
 
 // Fonts
 extern prog_uchar                 glowdeck28a[2417];
@@ -100,8 +87,5 @@ extern prog_uchar                 Avenir18a[9409];
 extern prog_uchar                 ClockFont[4892];
 extern prog_uchar                 streams_icon[759];
 extern prog_uchar                 glowdeck_icon[1742];
-
-
-  
 
 #endif

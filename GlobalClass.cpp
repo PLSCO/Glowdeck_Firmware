@@ -8,15 +8,6 @@
 
 #include "GlobalClass.h"
 
-
 GlobalClass::GlobalClass() {
   return;
 }
-
-
-
-
-
-
-
-

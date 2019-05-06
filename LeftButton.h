@@ -25,10 +25,3 @@ class LeftButton: public Button {
 };
 
 #endif
-
-
-
-
-
-
-

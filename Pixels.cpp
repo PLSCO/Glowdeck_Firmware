@@ -1933,11 +1933,3 @@ void PixelsBase::setCurrentPixel(PRGB* color)
     int16_t c = color->convertTo565();
     deviceWriteData(highByte(c), lowByte(c));
 }
-
-
-
-
-
-
-
-

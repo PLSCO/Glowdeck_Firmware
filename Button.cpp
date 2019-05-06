@@ -8,69 +8,36 @@
 
 #include "Button.h"
 
-Button::Button(byte attachTo) : pin(attachTo) { 
-}
+Button::Button(byte attachTo) : pin(attachTo) {}
 
 void Button::setup() {
-  
     pinMode(pin, INPUT_PULLUP);
-    
     state = HIGH;
-    
 }
 
 void Button::loop() {
-  
   int prevState = state;
-  
   state = digitalRead(pin);
   
   if (prevState == HIGH && state == LOW) {
-    
     buttonDownMs = millis();
-    
-  }
-  else if (prevState == LOW && state == HIGH) {
-    
+  } else if (prevState == LOW && state == HIGH) {
     if (millis() - buttonDownMs < 50) {
-      
       // ignore this for debounce
-      
-    }
-    else if (millis() - buttonDownMs < 250) {
-      
+    } else if (millis() - buttonDownMs < 250) {
       shortClick();
       
       // Short click  
       // SerialManager::logEvent("FrontButton::shortClick()");
-          
-      
-    }
-    else  {
-      
+    } else  {
       longClick();
 
       // Long click
       // SerialManager::logEvent("FrontButton::longClick()");
-      
     }
-    
   }
-  
 }
 
-void Button::shortClick() {
-  
-}
+void Button::shortClick() {}
 
-void Button::longClick() {
-  
-}
-
-
-
-
-
-
-
-
+void Button::longClick() {}

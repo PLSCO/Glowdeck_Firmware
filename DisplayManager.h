@@ -12,7 +12,6 @@
 #include "GlobalClass.h"
 
 class DisplayManager: public Runnable {
-  
   public:
     DisplayManager(uint8_t clk, uint8_t mosi, uint8_t cs, uint8_t rst, uint8_t dc, uint8_t bl);
 
@@ -34,14 +33,6 @@ class DisplayManager: public Runnable {
   
   private:
     uint8_t _clk, _mosi, _cs, _rst, _dc, _bl;
-    
 };
 
 #endif
-
-
-
-
-
-
-

@@ -357,11 +357,3 @@ void PixelsAntialiased::drawCircleAntialiaced(int16_t x, int16_t y, int16_t radi
     drawRoundRectangleAntialiased(x - radius, y - radius, radius << 1, radius << 1, radius, radius, bordermode);
 }
 #endif
-
-
-
-
-
-
-
-

@@ -24,10 +24,3 @@ class RightButton: public Button {
 };
 
 #endif
-
-
-
-
-
-
-

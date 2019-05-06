@@ -47,11 +47,3 @@ class GlobalClass {
 };
 
 #endif
-
-
-
-
-
-
-
-

@@ -24,10 +24,3 @@ class FrontButton: public Button {
 };
 
 #endif
-
-
-
-
-
-
-

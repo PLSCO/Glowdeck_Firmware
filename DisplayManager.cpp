@@ -19,7 +19,7 @@ Pixels pxs(320, 240);
 
 // Globals
 String streamTypes[8] = {"weather", "instagram", "calls", "facebook", "messages", "twitter", "email", "news"};
-String firmwareBuild = "94";
+String firmwareBuild = "95";
 
 DisplayManager::DisplayManager(uint8_t clk, uint8_t mosi, uint8_t cs, uint8_t rst, uint8_t dc, uint8_t bl) : _clk(clk), _mosi(mosi), _cs(cs), _rst(rst), _dc(dc), _bl(bl) {
   pinMode(_clk, OUTPUT);
@@ -104,45 +104,28 @@ void DisplayManager::loop() {
 }
 
 void DisplayManager::printStream(String type, String text, String source, String keyword) {
-  
   printStreamSpectrum(type, 7);
-  
   printStreamBorder();
-  
   printTypeIcon(type);
-  
   printHeadline(text, keyword);
-  
   printSource(source);
-  
 }
 
 void DisplayManager::printBluetooth(uint8_t on) {
-  
   if (on == 1) {
-    
      // pxs.drawCompressedBitmap(6, 6, btdIcon);
-    
   }
-  
 }
 
 void DisplayManager::printWifi(uint8_t on) {
-
   if (on == 1) {
-
     pxs.setFont(glowdeck28a);
-    
     pxs.setColor(255, 255, 255);
-    
-    pxs.print(147, 4, "I");
-        
+    pxs.print(147, 4, "I");  
   }
-  
 }
 
 void DisplayManager::printTypeIcon(String type) {
-  
   int x = 3;
   int y = 201;
   
@@ -168,235 +151,127 @@ void DisplayManager::printTypeIcon(String type) {
   pxs.setFont(glowdeck28a);
   
   pxs.print(x, y, icon);
-  
 }
 
 void DisplayManager::printHeadline(String text, String focusWord) {
-  
   int x = 44;
-  
   int y = 201;
-  
   int s = 4;
   
   pxs.setFont(Avenir18a);
   
-  String word = ""; 
-        
+  String word = "";   
   String a = "";
-  
   String b = ""; 
-  
   String c = "";
   
   int focusFlag = 0; 
-  
   int abc = 0;
   
   pxs.setColor(0, 0, 0);
-  
   pxs.fillRectangle(x-1, y-1, 275, 42);
-  
   pxs.setColor(255, 255, 255);
   
   if (text.indexOf(" ") != -1) {
-    
     if (focusWord.length() >= 2) {
-      
       if (text.indexOf(focusWord) != -1) {
-        
         while (text.length() >= 1) {
-        
           if (text.indexOf(" ") != -1) {
-            
             word = text.substring(0, text.indexOf(" "));
-            
             text = text.substring(text.indexOf(" ")+1, text.length());
-            
-          }
-          
-          else {
-            
+          } else {
             word = text;
-            
             text = "";
-            
           }
         
           if (word.indexOf(focusWord) != -1) {
-            
             if (focusFlag == 0) { 
-              
               if (a == "") {a = word; abc = 1;}
-              
               else if (b == "") {b = word; abc = 2;}
-              
               else if (c == "") {c = word; abc = 3;}
               
               focusFlag = 1;
-              
             }
-            
-          }
-          
-          else {
-            
+          } else {
             if (focusFlag == 0) {
-              
               if (a != "") a += " ";
-              
               a += word;
-              
-            }
-            
-            else {
-              
+            } else {
               if (b == "") {
-                
                 if (b != "") b += " ";
-                
                 b += word;
-                
-              }
-              
-              else {
-                
+              } else {
                 if (c != "") c += " ";
-                
                 c += word;
-                
               }
-              
             }
-            
           }
-        
         }
         
         if (focusFlag == 0) {
-      
           pxs.print(x, y, a);
-      
-        }
-        
-        else if (abc == 1) {
-          
+        } else if (abc == 1) {
           pxs.setColor(0, 173, 238);
-          
           pxs.print(x, y, a);
-          
           int x2 = pxs.getTextWidth(a) + s;
-          
           pxs.setColor(255, 255, 255);
-          
           pxs.print(x + x2, y, b);
-          
           int x3 = pxs.getTextWidth(b) + s;
-          
           pxs.setColor(255, 255, 255);
-          
           pxs.print(x + x2 + x3, y, c);
-    
-        }
-        
-        else if (abc == 2) {
-          
+        } else if (abc == 2) {
           pxs.setColor(255, 255, 255);
-          
           pxs.print(x, y, a);
-          
           int x2 = pxs.getTextWidth(a) + s;
-          
           pxs.setColor(0, 173, 238);
-          
           pxs.print(x + x2, y, b);
-          
           int x3 = pxs.getTextWidth(b) + s;
-          
           pxs.setColor(255, 255, 255);
-          
           pxs.print(x + x2 + x3, y, c);
-        
         }
-        
-      }
-      
-      else {
-        
+      } else {
         pxs.print(x, y, text);
-        
         return;
-        
       }
-      
-    }
-    
-    else {
-      
+    } else {
       pxs.print(x, y, text);
-      
       return;
-      
     }
-  
-  }
-  
-  else {
-    
+  } else {
     pxs.print(x, y, text);
-    
   }
-  
 }
 
 void DisplayManager::printSource(String text) {
-  
   pxs.setColor(0, 0, 0);
-  
   pxs.fillRectangle(160, 220, 160, 20);
-  
   pxs.setColor(220, 220, 220);
-  
   pxs.setFont(Avenir17a);
   
   int textWidth = pxs.getTextWidth(text);
-  
   int x = 310 - textWidth;
-  
   int y = 224;
   
   pxs.print(x, y, text);
-  
 }
 
 void DisplayManager::printStreamSpectrum(String active, int q) {
-  
   int key = 1;
   
   for (int i = 0; i < 7; i++) {
-    
     if (streamTypes[i] == active) {
-      
       key = i;
-      
       break;
-      
     }
-    
   }
   
   for (int i = 0; i < q; i++) {
-    
     printStreamSquare(streamTypes[key], i, q);
-    
     key = (key + 1) % 7;
-    
   }
-  
 }
 
 void DisplayManager::printStreamSquare(String type, int id, int q) {
-
     if (type == "general") pxs.setColor(0, 173, 238);           // GENERAL (LIGHT BLUE)
     if (type == "weather") pxs.setColor(252, 238, 33);          // WEATHER (YELLOW)
     else if (type == "instagram") pxs.setColor(250, 175, 58);   // INSTAGRAM (ORANGE)
@@ -420,7 +295,6 @@ void DisplayManager::printStreamSquare(String type, int id, int q) {
     int h = 8;
     
     pxs.fillRectangle(x, y, w, h);
-    
 }
 
 void DisplayManager::printStreamBorder() {
@@ -433,11 +307,3 @@ void DisplayManager::printStreamBorder() {
   pxs.drawLine(x, y+h, x+totalWidth-1, y+h);
   */
 }
-
-
-
-
-
-
-
-

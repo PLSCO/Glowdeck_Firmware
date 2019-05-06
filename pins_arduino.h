@@ -281,10 +281,3 @@ static inline uint8_t digitalPinToTimer(uint8_t pin)
 #define SerialUSB			Serial
 
 #endif
-
-
-
-
-
-
-

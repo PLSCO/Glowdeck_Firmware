@@ -25,11 +25,3 @@ void RightButton::longClick() {
   SerialManager::logEvent("RightButton::longClick()");
   
 }
-
-
-
-
-
-
-
-

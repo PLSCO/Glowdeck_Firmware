@@ -11,9 +11,7 @@
 
 #include "GlobalClass.h"
 
-
 class Button: public Runnable {
-  
   const byte pin;
   int state;
   unsigned long buttonDownMs;
@@ -30,10 +28,3 @@ class Button: public Runnable {
 };
 
 #endif
-
-
-
-
-
-
-

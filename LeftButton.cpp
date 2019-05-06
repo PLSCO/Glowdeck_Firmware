@@ -26,11 +26,3 @@ void LeftButton::longClick() {
   SerialManager::logEvent("LeftButton::longClick()");
   
 }
-
-
-
-
-
-
-
-

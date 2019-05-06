@@ -52,10 +52,3 @@ class SerialManager: public Runnable {
 };
 
 #endif
-
-
-
-
-
-
-

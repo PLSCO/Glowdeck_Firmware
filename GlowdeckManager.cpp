@@ -15,6 +15,3 @@ GlowdeckManager::GlowdeckManager(bool on) {
   udid = "00000";
   return;
 }
-
-
-

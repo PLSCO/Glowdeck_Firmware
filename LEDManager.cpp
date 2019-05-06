@@ -7,7 +7,7 @@
 //
 
 #include "LEDManager.h"
-#include "FastLED/FastLED.h"
+#include <FastLED.h>
 
 FASTLED_USING_NAMESPACE
 
@@ -129,12 +129,3 @@ void LEDManager::juggle() {
     dothue += 32;
   }
 }
-
-
-
-
-
-
-
-
-

@@ -751,12 +751,3 @@ class BitStream
 };
 
 #endif
-
-
-
-
-
-
-
-
-

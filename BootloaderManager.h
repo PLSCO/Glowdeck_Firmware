@@ -12,7 +12,6 @@
 #include "GlobalClass.h"
 
 class BootloaderManager {
-
   private:
     BootloaderManager();
     BootloaderManager(BootloaderManager const& copy);
@@ -29,14 +28,6 @@ class BootloaderManager {
 
   public:
     friend class SerialManager;
-  
 };
 
 #endif
-
-
-
-
-
-
-

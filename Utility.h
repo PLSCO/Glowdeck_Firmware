@@ -25,6 +25,3 @@ static int scaleBrightness(uint8_t inp) {
 }
 
 #endif
-
-
-

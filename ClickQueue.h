@@ -12,9 +12,7 @@
 
 #include "GlobalClass.h"
 
-
 class ClickQueue: public Runnable {
-  
     const byte pin;
   
     // Slow for testing
@@ -39,15 +37,6 @@ class ClickQueue: public Runnable {
     void addAClick();
     void addClicks(int clicks);
     void cancel();
-    
 };
 
 #endif
-
-
-
-
-
-
-
-

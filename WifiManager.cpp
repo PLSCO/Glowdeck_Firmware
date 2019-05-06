@@ -1605,8 +1605,3 @@ boolean WifiManager::txrx(String command) {
   }
   
 }
-
-
-
-
-

@@ -261,11 +261,3 @@ typedef __UINTMAX_TYPE__ uintmax_t;
      || defined __STDC_CONSTANT_MACROS) */
 
 #endif /* _GCC_STDINT_H */
-
-
-
-
-
-
-
-

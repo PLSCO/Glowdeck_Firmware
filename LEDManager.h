@@ -11,9 +11,7 @@
 
 #include "GlobalClass.h"
 
-
 class LEDManager: public Runnable {
- 
   public:
     LEDManager(int state);
 
@@ -34,19 +32,11 @@ class LEDManager: public Runnable {
 
     // void rainbowCycle(int wait, int cycles, int dim);
      
-  //private:
-  //  LEDState _ledState;
+  // private:
+  //   LEDState _ledState;
 
   public:
     friend class SerialManager;
-    
 };
 
 #endif
-
-
-
-
-
-
-

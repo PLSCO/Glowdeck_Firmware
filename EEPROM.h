@@ -40,7 +40,6 @@
 ***/
 
 struct EERef {
-
     EERef( const int index )
         : index( index )                 {}
 
@@ -91,7 +90,6 @@ struct EERef {
 ***/
 
 struct EEPtr {
-
     EEPtr( const int index )
         : index( index )                {}
 
@@ -120,7 +118,6 @@ struct EEPtr {
 ***/
 
 struct EEPROMClass {
-
 #if defined(__arm__) && defined(TEENSYDUINO)
     EEPROMClass()                        { eeprom_initialize(); }
 #endif
@@ -158,11 +155,3 @@ struct EEPROMClass {
 
 static EEPROMClass EEPROM;
 #endif
-
-
-
-
-
-
-
-

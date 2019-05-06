@@ -2024,10 +2024,3 @@ extern teensy3_clock_class Teensy3Clock;
 
 
 #endif
-
-
-
-
-
-
-

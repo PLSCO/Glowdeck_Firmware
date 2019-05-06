@@ -12,7 +12,6 @@
 #include "GlobalClass.h"
 
 class GlowdeckManager {
-
   public:
     GlowdeckManager(bool on);
 
@@ -27,13 +26,6 @@ class GlowdeckManager {
     friend class WifiManager;
     friend class BluetoothManager;
     friend class DisplayManager;
-
 };
 
 #endif
-
-
-
-
-
-

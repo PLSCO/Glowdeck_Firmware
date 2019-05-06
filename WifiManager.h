@@ -75,10 +75,3 @@ class WifiManager: public Runnable {
 };
 
 #endif
-
-
-
-
-
-
-

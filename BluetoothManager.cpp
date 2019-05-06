@@ -39,14 +39,12 @@ BluetoothManager::BluetoothManager(HardwareSerial2 *ser) {
   pinMode(PIO5, OUTPUT);
 
   bt.begin(9600);
-  
 }
 
 void BluetoothManager::setup() {
   memset(recvBuffer, 0, sizeof(recvBuffer));
   recvProcess = "";
   clear();
-
   // send("VERSION");
 }
 
@@ -1062,12 +1060,3 @@ BluetoothManager::btResult BluetoothManager::connectionState() {
   return retVal;
   
 }
-
-
-
-
-
-
-
-
-
