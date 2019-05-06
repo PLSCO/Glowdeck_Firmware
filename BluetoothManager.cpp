@@ -456,7 +456,7 @@ BluetoothManager::btResult BluetoothManager::addressQuery(String &address) {
 }
 
 BluetoothManager::btResult BluetoothManager::setBaudRate(baudRates newSpeed) {
-  int intSpeed;
+  // int intSpeed;
   String stringSpeed;
   
   // Convert enum values into strings
@@ -481,18 +481,16 @@ BluetoothManager::btResult BluetoothManager::setBaudRate(baudRates newSpeed) {
   }
   
   // Valid input to the function, send it to set parameter function
-  intSpeed = stringSpeed.toInt();  
+  // intSpeed = stringSpeed.toInt();  
 
   
   //  SUCCESS         indicates baud rate set to the current baud rate
   //  MODULE_ERROR    indicates something happened to string pre-transmission
   //  TIMEOUT_ERROR   indicates wrong baud rate
   return stdSetParam("BAUD", stringSpeed);
-  
 }
 
 BluetoothManager::btResult BluetoothManager::stdCmd(String command) {
-  
   String buffer;
  
   String EOL = String("\n\r");
@@ -729,7 +727,7 @@ BluetoothManager::btResult BluetoothManager::BLEScan(int timeout) {
         }
         else {
           
-          for (char i = 0; i < _numAddresses; i++) {
+          for (uint8_t i = 0; i < _numAddresses; i++) {
            
             if (addressTemp == _addresses[i]) {
           
@@ -743,7 +741,7 @@ BluetoothManager::btResult BluetoothManager::BLEScan(int timeout) {
           
           if (addressTemp != "x") {
           
-            _addresses[_numAddresses++] = addressTemp;
+            _addresses[uint8_t(_numAddresses++)] = addressTemp;
           
             result++;
          
@@ -770,7 +768,6 @@ BluetoothManager::btResult BluetoothManager::enterDataMode() {
 }
 
 BluetoothManager::btResult BluetoothManager::exitDataMode(int guardDelay) {
- 
   String buffer;
  
   delay(guardDelay);
@@ -803,7 +800,7 @@ BluetoothManager::btResult BluetoothManager::connect(char index, profiles connec
  
   if (index >= _numAddresses) return INVALID_PARAM;
  
-  else return connect(_addresses[index], connection);
+  else return connect(_addresses[uint8_t(index)], connection);
 
 }
 
@@ -873,17 +870,15 @@ BluetoothManager::btResult BluetoothManager::connect(String address, profiles co
   }
   
   return TIMEOUT_ERROR;
-
 }
 
 BluetoothManager::btResult BluetoothManager::inquiry(int timeout) {
-  
   // Runs the "INQUIRY" command, with user defined timeout. Returns the number of
   //  devices found, up to 5. The response expected looks like this:
   //    INQUIRY 20FABB010272 240404 -37db
   //    INQUIRY A4D1D203A4F4 6A041C -91db
   
-  int result = 0;
+  // int result = 0;
   String buffer = "";
   String addressTemp;
   
@@ -894,8 +889,8 @@ BluetoothManager::btResult BluetoothManager::inquiry(int timeout) {
   // knownStart();
 
   send("INQUIRY " + String(timeout) + "\r"); 
-  //bt.print(timeout);
-  //bt.print("\r");
+  // bt.print(timeout);
+  // bt.print("\r");
   // bt.flush();
 
   /*
@@ -960,7 +955,6 @@ BluetoothManager::btResult BluetoothManager::inquiry(int timeout) {
   }
   */
   return TIMEOUT_ERROR;
-  
 }
 
 BluetoothManager::btResult BluetoothManager::getAddress(char index, String &address) {
@@ -974,7 +968,7 @@ BluetoothManager::btResult BluetoothManager::getAddress(char index, String &addr
     return INVALID_PARAM;
  
   }
-  else address = _addresses[index];
+  else address = _addresses[uint8_t(index)];
 
   return SUCCESS;
   
@@ -1002,9 +996,8 @@ BluetoothManager::btResult BluetoothManager::connectionState() {
   
       buffer.concat(temp);
   
-      if (temp = '\r') break;
-  
-    }  
+      if (temp == '\r') break;
+    }
 
     if (buffer.endsWith(endOfLine)) {
      

@@ -382,8 +382,8 @@ void PixelsBase::drawCircle(int16_t x, int16_t y, int16_t r)
 
 void PixelsBase::fillCircle(int16_t x, int16_t y, int16_t r)
 {
-    int16_t yy;
-    int16_t xx;
+    // int16_t yy;
+    // int16_t xx;
 
     fillOval(x - r, y - r, x + r, y - r);
 
@@ -851,9 +851,10 @@ int8_t PixelsBase::drawCompressedBitmap(int16_t x, int16_t y, uint8_t* data)
     int rasterPtr = 0;
     int rasterLine = 0;
 
-    if (orientation != PORTRAIT)
-    {
+    if (orientation != PORTRAIT) {
         raster = new int[width];
+    } else {
+        raster = new int[height];
     }
 
     chipSelect();
@@ -1013,8 +1014,9 @@ int8_t PixelsBase::drawCompressedBitmap(int16_t x, int16_t y, uint8_t* data)
 
 int8_t PixelsBase::loadBitmap(int16_t x, int16_t y, int16_t sx, int16_t sy, String path)
 {
-    int16_t* data = loadFileBytes(path);
-    return 0; // drawBitmap(x, y, sx, sy, data);
+    // int16_t* data = loadFileBytes(path);
+    return 0; 
+    // drawBitmap(x, y, sx, sy, data);
 }
 
 /*  -------   Antialiasing ------- */
@@ -1088,7 +1090,7 @@ void PixelsBase::printString(int16_t xx, int16_t yy, String text, boolean clean,
 
     int16_t x1 = xx;
 
-    for (int16_t t = 0; t < text.length(); t++)
+    for (int16_t t = 0; t < int16_t(text.length()); t++)
     {
         char c = text.charAt(t);
 
@@ -1184,7 +1186,7 @@ int16_t PixelsBase::getTextWidth(String text, int8_t kerning[])
     int16_t kern = -100; // no kerning
     int16_t x1 = 0;
 
-    for (int16_t t = 0; t < text.length(); t++)
+    for (int16_t t = 0; t < int16_t(text.length()); t++)
     {
         char c = text.charAt(t);
 
@@ -1716,7 +1718,7 @@ void PixelsBase::drawPixel(int16_t x, int16_t y)
             if (landscape)
             {
                 int edge = currentScroll;
-                if (!scrollCleanMode && x == edge || x > edge)
+                if ((!scrollCleanMode) && ((x == edge) || (x > edge)))
                 {
                     return;
                 }
@@ -1724,7 +1726,7 @@ void PixelsBase::drawPixel(int16_t x, int16_t y)
             else
             {
                 int edge = currentScroll;
-                if (!scrollCleanMode && y == edge || y > edge)
+                if ((!scrollCleanMode) && ((y == edge) || (y > edge)))
                 {
                     return;
                 }

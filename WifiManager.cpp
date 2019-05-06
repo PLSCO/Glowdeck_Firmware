@@ -917,7 +917,7 @@ int WifiManager::wifiSetup() {
   
   int bothbaud = 0;  // =0 IF WE DID NOT TRY 115200 YET, =1 IF WEVE TRIED 115200
   
-  char usr_done = '1';
+  // char usr_done = '1';
 
   /*
   if (EEPROM.read(41) == usr_done) {
