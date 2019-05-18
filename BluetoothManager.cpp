@@ -8,23 +8,19 @@
 
 #include "BluetoothManager.h"
 
-extern GlowdeckManager      glowdeckManager;
-extern BootloaderManager    bootloaderManager;
-extern SerialManager        serialManager;
-extern LEDManager           ledManager;
-extern DisplayManager       displayManager;
+extern GlowdeckManager glowdeckManager;
+extern BootloaderManager bootloaderManager;
+extern SerialManager serialManager;
+extern LEDManager ledManager;
+extern DisplayManager displayManager;
 
 BluetoothManager::BluetoothManager(HardwareSerial2 *ser) {
   this->bt = btle;
-  
   recvPrefixLength = 8;
   melodyVersion = "6.1.5";
   nextGen = true;
-  
   _numAddresses = -1;
-  
   endOfLine = String("\n\r");
-
   // melodyVersion = "5.7.14";
 
   bleConnected = false;
@@ -156,10 +152,12 @@ void BluetoothManager::clear() {
 
 void BluetoothManager::handleMessage(String msg) {
   if ((msg == " ") || (msg.length() < 2)) return;
-
+  
   #if defined DEBUG
     main.println("[BT] " + msg);
   #endif
+
+  displayManager.debugPrint(msg);
 
   if (msg.contains("Melody Audio")) {
     String verString = msg.replace("Melody Audio V", "");
@@ -192,38 +190,25 @@ void BluetoothManager::handleMessage(String msg) {
         recvPrefixLength = 8;
       }
     }
-  }
-  else if (msg.contains("CLOSE_OK ")) {
+  } else if (msg.contains("CLOSE_OK ")) {
     if (msg.contains("BLE")) {
       bleConnected = false;
     }
     else if (msg.contains("SPP")) {
       sppConnected = false;
     }
-  }
-  else if ((msg.contains("GFU^")) || (msg.contains("```"))) {
-    
+  } else if ((msg.contains("GFU^")) || (msg.contains("```"))) {
     BootloaderManager::enterBootloaderMode();
-    
   }
   else if (msg.contains("ANM:")) {
-    
     if (msg.contains("-1")) {
-      
       ledManager.ledState = -1;
-      
-    }
-    else {
-      
+    } else {
       ledManager.ledState = 2;
-      
     }
-    
-  }
-  else if (msg.contains("TEST^^^")) {
+  } else if (msg.contains("TEST^^^")) {
     unitTest();
   }
-  
 }
 
 String BluetoothManager::send(String raw) {
@@ -244,7 +229,6 @@ String BluetoothManager::send(String raw) {
 }
 
 void BluetoothManager::unitTest() {
-  
   int connectionResult = 0;
   
   main.print("Inquiry result: "); 

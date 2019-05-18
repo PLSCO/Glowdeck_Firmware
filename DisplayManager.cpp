@@ -14,10 +14,8 @@
 
 extern GlowdeckManager glowdeckManager;
 
-// Pixels library object
 Pixels pxs(320, 240);
 
-// Globals
 String streamTypes[8] = {"weather", "instagram", "calls", "facebook", "messages", "twitter", "email", "news"};
 String firmwareBuild = "95";
 
@@ -39,68 +37,61 @@ DisplayManager::DisplayManager(uint8_t clk, uint8_t mosi, uint8_t cs, uint8_t rs
 }
 
 void DisplayManager::setup() {
-  pxs.setBackground(0,0,0);
-  pxs.setColor(255,255,255);
+  pxs.setBackground(0, 0, 0);
+  pxs.setColor(255, 255, 255);
   pxs.clear();
   pxs.drawCompressedBitmap(121, 65, glowdeck_icon);
-    
   printStream("general", "Glowdeck v2.0", "", "");
 }
 
 void DisplayManager::loop() {
-  
-/*
-  pxs.setColor(255, 255, 255);
+  // streamsDemo();
+}
 
+void DisplayManager::streamsDemo() {
+  pxs.setColor(255, 255, 255);
   pxs.clear();
   
   // Weather
   printStream("weather", "Partly Cloudy", "46 | 3:44pm", "");
-  
   delay(2500);
-  
   pxs.setColor(0, 0, 0);
-  
   pxs.fillRectangle(0, 198, 320, 42);
   
   // Instagram
-  printStream("instagram", "what are you dune?", "@quickstagramm", "");
-  
+  printStream("instagram", "what are you doing?", "@quickstagramm", "");
   delay(2500);
-  
   pxs.setColor(0, 0, 0);
-  
   pxs.fillRectangle(0, 198, 320, 42);
   
   // Calls
   printStream("calls", "Incoming Call", "Jennifer Smith", "");
-  
   delay(2500);
   
   // Facebook
   printStream("facebook", "happy birthday pal", "Joe McMann", "");
-  
   delay(2500);
   
   // Messages
   printStream("messages", "where are you", "Melissa Quick", "");
-  
   delay(2500);
   
   // Twitter
   printStream("twitter", "streams is getting a makeover", "glowdeck", "streams");
-  
   delay(2500);
   
   // Email
   printStream("email", "Re: meeting tomorrow", "John Smith", "");
-  
   delay(2500);
   
   // News
   printStream("news", "NJ lottery jackpot grows", "NYTimes", "lottery");
-*/
+}
 
+void DisplayManager::debugPrint(String text) {
+  pxs.clear();
+  pxs.setColor(255, 255, 255);
+  pxs.print(0, 0, text);
 }
 
 void DisplayManager::printStream(String type, String text, String source, String keyword) {
@@ -130,7 +121,6 @@ void DisplayManager::printTypeIcon(String type) {
   int y = 201;
   
   String icon = "?";
-  
   pxs.setColor(0, 0, 0);
   pxs.fillRectangle(0, 197, 43, 43);
 
@@ -149,7 +139,6 @@ void DisplayManager::printTypeIcon(String type) {
   else if (type == "music") {icon = "d"; pxs.setColor(235, 32, 38);}
   
   pxs.setFont(glowdeck28a);
-  
   pxs.print(x, y, icon);
 }
 
@@ -169,7 +158,7 @@ void DisplayManager::printHeadline(String text, String focusWord) {
   int abc = 0;
   
   pxs.setColor(0, 0, 0);
-  pxs.fillRectangle(x-1, y-1, 275, 42);
+  pxs.fillRectangle(x - 1, y - 1, 275, 42);
   pxs.setColor(255, 255, 255);
   
   if (text.indexOf(" ") != -1) {
@@ -178,7 +167,7 @@ void DisplayManager::printHeadline(String text, String focusWord) {
         while (text.length() >= 1) {
           if (text.indexOf(" ") != -1) {
             word = text.substring(0, text.indexOf(" "));
-            text = text.substring(text.indexOf(" ")+1, text.length());
+            text = text.substring(text.indexOf(" ") + 1, text.length());
           } else {
             word = text;
             text = "";

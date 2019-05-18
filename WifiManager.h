@@ -11,6 +11,7 @@
 #define _WIFIMANAGER_H
 
 #include "GlobalClass.h"
+#include "DigiFi.h"
 
 
 class WifiManager: public Runnable {
@@ -29,11 +30,8 @@ class WifiManager: public Runnable {
 
   private:
     HardwareSerial1   wi;
-
     String            wifiBuffer;
     uint8_t           recvPrefixLength;
-
-    
     String            accessPointName;
     String            password;
     String            wiscan[20][5];    // STORAGE ARRAY FOR FOUND WIFI NETWORKS (0:SSID,1:AUTHENTICATION TYPE,2:ENCRYPTION METHOD,3:RSSI,4:PASSWORD)
@@ -44,7 +42,6 @@ class WifiManager: public Runnable {
     uint8_t           wifiOn = 1;
     uint8_t           signalStrength = 3;
 
-    
   public:
     friend class SerialManager;
     friend class BluetoothManager;
@@ -71,7 +68,6 @@ class WifiManager: public Runnable {
     void    reset();
     boolean link();
     boolean txrx(String command);
-
 };
 
 #endif

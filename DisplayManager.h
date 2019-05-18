@@ -18,6 +18,8 @@ class DisplayManager: public Runnable {
     void setup();
     void loop();
 
+    static void streamsDemo(void);
+    static void debugPrint(String text);
     static void printStream(String type, String text, String source, String keyword);
     static void printBluetooth(uint8_t on);
     static void printWifi(uint8_t on);
@@ -28,9 +30,8 @@ class DisplayManager: public Runnable {
     static void printStreamSquare(String type, int id, int q);
     static void printStreamBorder(void);
 
-    uint8_t brightness      = 10;
-    bool    autoBrightness  = false;
-  
+    uint8_t brightness = 10;
+    bool autoBrightness = false;
   private:
     uint8_t _clk, _mosi, _cs, _rst, _dc, _bl;
 };
