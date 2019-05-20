@@ -7,7 +7,6 @@
 //
 
 #include "GlobalClass.h"
-
 // TODO: Move these to GlobalClass
 #include "FrontButton.h"
 #include "LeftButton.h"
@@ -29,13 +28,9 @@ BluetoothManager bluetoothManager(&Serial2);
 LEDManager ledManager(1);
 DisplayManager displayManager(LCD_SCK, LCD_MOSI, LCD_CS, LCD_RST, LCD_DC, LCD_BL);
 
-// MARK: Setup
-
 void setup() {
   Runnable::setupAll();
 }
-
-// MARK: Loop
 
 void loop() {
   Runnable::loopAll();

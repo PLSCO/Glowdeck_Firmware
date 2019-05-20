@@ -104,7 +104,7 @@ void DisplayManager::printStream(String type, String text, String source, String
 
 void DisplayManager::printBluetooth(uint8_t on) {
   if (on == 1) {
-     // pxs.drawCompressedBitmap(6, 6, btdIcon);
+    // pxs.drawCompressedBitmap(6, 6, btdIcon);
   }
 }
 

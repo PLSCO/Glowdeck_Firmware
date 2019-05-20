@@ -8,7 +8,6 @@
 
 #include "ClickQueue.h"
 
-
 ClickQueue::ClickQueue(byte attachTo) : pin(attachTo) {}
 
 void ClickQueue::setup() {
@@ -46,7 +45,6 @@ void ClickQueue::loop() {
 
 void ClickQueue::addAClick() {
   pendingClicks++;
-  
 }
 
 void ClickQueue::addClicks(int clicks) {

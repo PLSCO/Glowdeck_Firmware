@@ -8,12 +8,12 @@
 
 #include "WifiManager.h"
 
-extern GlowdeckManager      glowdeckManager;
-extern BootloaderManager    bootloaderManager;
-extern SerialManager        serialManager;
-extern BluetoothManager     bluetoothManager;
-extern LEDManager           ledManager;
-extern DisplayManager       displayManager;
+extern GlowdeckManager glowdeckManager;
+extern BootloaderManager bootloaderManager;
+extern SerialManager serialManager;
+extern BluetoothManager bluetoothManager;
+extern LEDManager ledManager;
+extern DisplayManager displayManager;
 
 WifiManager::WifiManager(HardwareSerial1 *ser) {
   this->wi = wifi;
@@ -28,7 +28,7 @@ void WifiManager::setup() {
   while (wi.available()) { wi.read(); }
   
   commandMode();
-  wi.print("AT+E\r"); 
+  wi.print("AT+E\r");
   getResponse(0);
   
   while (wi.available()) { wi.read(); }
@@ -47,10 +47,10 @@ void WifiManager::setup() {
   
   wi.print(F("AT+GDSSID="));
   
-  if ((accessPointName != "0") && (accessPointName != "MyRouter")) {
+  if ((accessPointName != "0") && (accessPointName != "LucyInTheSky")) {
     wi.print(accessPointName); 
   } else {
-    wi.print("MyRouter");
+    wi.print("LucyInTheSky");
   }
   
   wi.print("\r"); 
@@ -64,16 +64,16 @@ void WifiManager::setup() {
   getResponse(0);
   
   wi.print(F("AT+HTTPURL=glowdeck.com,443\r"));
-  getResponse(0);  //CLEAR RESPONSE (Expecting: +ok)
+  getResponse(0);  // CLEAR RESPONSE (Expecting: +ok)
   
   wi.print(F("AT+HTTPTP=POST\r"));
-  getResponse(0);  //CLEAR RESPONSE (Expecting: +ok)
+  getResponse(0);  // CLEAR RESPONSE (Expecting: +ok)
   
   wi.print(F("AT+HTTPCN=keep-alive\r"));
-  getResponse(0);  //CLEAR RESPONSE (Expecting: +ok)
+  getResponse(0);  // CLEAR RESPONSE (Expecting: +ok)
   
-  wi.print(F("AT+HTTPUA=lwip1.3.2\r"));  //TO DO: CHANGE UA TO UDID
-  getResponse(0);  //CLEAR RESPONSE (Expecting: +ok)
+  wi.print(F("AT+HTTPUA=lwip1.3.2\r")); // TO DO: CHANGE UA TO UDID
+  getResponse(0);  // CLEAR RESPONSE (Expecting: +ok)
   
   wi.print(F("AT+TCPDIS=on\r"));
   getResponse(0);
@@ -107,10 +107,8 @@ void WifiManager::loop() {
 void WifiManager::clear() {
   wi.flush();
   
-  if (wi.available()) {
-    while (wi.available()) {
-      wi.read();
-    }
+  while (wi.available()) {
+    wi.read();
   }
 }
 
@@ -119,9 +117,11 @@ void WifiManager::handleMessage(String cmd) {
   cmd = cmd.trim(); 
 
   // #if defined DEBUG
-    main.println("[WI] " + cmd);
+  //  main.println("[WI] " + cmd);
   // #endif
 
+  displayManager.debugPrint("[WI] " + cmd);
+  
   if (!(cmd.length() > 1)) return;
 
   if ((cmd == "+ok") || (cmd == "+ERR")) return;
@@ -130,20 +130,23 @@ void WifiManager::handleMessage(String cmd) {
     int tmp_len = cmd.length();
     cmd = cmd.substring(4, tmp_len);
   }
-  
-  if (cmd.indexOf(F("Ch,SSID,BSSID,")) != -1) { // AT+WSCAN RESPONSE DATA (SSIDs AND AUTH/ENCRYPTION MODES)
+
+  // AT+WSCAN RESPONSE DATA (SSIDs AND AUTH/ENCRYPTION MODES)
+  if (cmd.indexOf(F("Ch,SSID,BSSID,")) != -1) { 
     for (int i = 0; i < 20; i++) {
       for (int j = 0; j < 4; j++) {
         wiscan[i][j] = F("");
       }
     }
     
-    ssid_count = -1; 
+    ssid_count = -1;
     return;
-  } else if ((cmd.indexOf(F("WPA2PSK/AES")) != -1) || (cmd.indexOf(F("OPEN/NONE")) != -1) || (cmd.indexOf(F("WPAPSK/TKIPAES")) != -1) || (cmd.indexOf(F("WPAPSKWPA2PSK/TKIPAES")) != -1)) { // SSID IN-RANGE LINE
+  // SSID IN-RANGE LINE
+  } else if ((cmd.indexOf(F("WPA2PSK/AES")) != -1) || (cmd.indexOf(F("OPEN/NONE")) != -1) || (cmd.indexOf(F("WPAPSK/TKIPAES")) != -1) || (cmd.indexOf(F("WPAPSKWPA2PSK/TKIPAES")) != -1)) {
     logSsid(cmd);
     return;
-  } else if (cmd.indexOf(F("RF Off")) != -1) { // USR MODULE OFF
+  // USR MODULE OFF
+  } else if (cmd.indexOf(F("RF Off")) != -1) { 
     if (wifiOn == 1) {
       wifiOn = 0; 
       displayManager.printWifi(0);
@@ -151,7 +154,8 @@ void WifiManager::handleMessage(String cmd) {
     
     wifiOn = 0; 
     return;
-  } else if (cmd.indexOf(F("Disconnected")) != -1) { // NOT CONNECTED
+  // NOT CONNECTED
+  } else if (cmd.indexOf(F("Disconnected")) != -1) { 
     if (wifiOn == 1) {
       wifiOn = 0; displayManager.printWifi(0);
     }
@@ -159,24 +163,17 @@ void WifiManager::handleMessage(String cmd) {
     wifiOn = 0;
     main.println(F("STA LINK DISCONNECTED"));
     return;
-  } else if (cmd.indexOf(accessPointName + F("(")) != -1)  { // STA LINK SUCCESSFULLY ESTABLISHED
-    
+  // STA LINK SUCCESSFULLY ESTABLISHED
+  } else if (cmd.indexOf(accessPointName + F("(")) != -1)  { 
     if (wifiOn == 0) {
-      
       wifiOn = 1; 
-      
       displayManager.printWifi(1);
-      
       wi.print(F("AT+WANN\r")); 
-      
       handleMessage(getResponse(0));
-      
     }
     
     wifiOn = 1; 
-    
-    main.println(F("STA LINK ESTABLISHED"));
-    
+    // main.println(F("STA LINK ESTABLISHED"));
     return;
   }
   //else if (cmd.indexOf(F("DHCP,")) != -1) {
@@ -194,26 +191,18 @@ void WifiManager::handleMessage(String cmd) {
   //}
   
   else if (cmd.endsWith(F("^"))) {
-    
     if (cmd.startsWith(F("LGN:"))) { 
-      
       String tmp_lnm = cmd.substring((cmd.indexOf(F(":"))+1), cmd.indexOf(F("^")));
-      
-      //if (glowdeckManager.longName != tmp_lnm) {
-        
-        //glowdeckManager.longName = tmp_lnm; 
-        
+      // if (glowdeckManager.longName != tmp_lnm) {
+        // glowdeckManager.longName = tmp_lnm; 
         tmp_lnm = F("");
-        
         bluetoothManager.clear();
         
         if ((bluetoothManager.bleConnected == 1) || (bluetoothManager.sppConnected == 1)) {
-          
           bluetoothManager.send(F("SEND LGN:OK^\n\r"));
-          
           delay(100);
-          
         }
+        
         /*
         bluetoothManager.send(F("SET NAME=")); 
         bluetoothManager.send(glowdeckManager.longName); 
@@ -234,23 +223,12 @@ void WifiManager::handleMessage(String cmd) {
       //wi.print(F("AT+GDLGN=") + glowdeckManager.longName + F("\r")); getResponse(0);
       
       return;
-      
-    }
-    
-    else if (cmd.startsWith(F("SSID:"))) { // USER SSID
-    
+    } else if (cmd.startsWith(F("SSID:"))) { // USER SSID
       accessPointName = cmd.substring((cmd.indexOf(F(":"))+1), cmd.indexOf(F("^")));
-      
       //wi.print(F("AT+GDSglowdeckManager.udid=") + accessPointName + F("\r")); getResponse(0);
-      
       return;
-      
-    }
-    
-    else if (cmd.startsWith(F("PASS:"))) { //USER SSID
-  
+    } else if (cmd.startsWith(F("PASS:"))) { //USER SSID
       password = cmd.substring((cmd.indexOf(F(":"))+1), cmd.indexOf(F("^")));
-      
       status(); //sync_counter = 1;
       
       //while (wi.available()) { wi.read(); }
@@ -305,17 +283,11 @@ void WifiManager::handleMessage(String cmd) {
       //}
       
       return;
-      
-    }
-    
-    else if (cmd.startsWith(F("UNM:"))) { // STREAMS USERNAME
-    
+    } else if (cmd.startsWith(F("UNM:"))) { // STREAMS USERNAME
       // UNM = cmd.substring((cmd.indexOf(F(":"))+1), cmd.indexOf(F("^")));
-      
       return;
-      
     }
-/*
+    /*
     else if (cmd.startsWith(F("PSW:"))) { //STREAMS PASSWORD
         
       PSW = cmd.substring((cmd.indexOf(F(":"))+1), cmd.indexOf(F("^")));
@@ -378,59 +350,37 @@ void WifiManager::handleMessage(String cmd) {
       return;
       
     }
-*/
-
+    */
     else if (cmd.startsWith(F("DL:"))) { // DISPLAY BRIGHTNESS SLIDER
- 
       int user_val = (cmd.substring((cmd.indexOf(F(":"))+1), cmd.indexOf(F("^")))).toInt();
       
       if (user_val == 11) { // USER ACTUALLY PRESSED DFU BUTTON
-        
         bootloaderManager.enterBootloaderMode();
-        
         return;
-        
-      }
-      else if ((user_val >= 0) && (user_val <= 10)) {
-        
+      } else if ((user_val >= 0) && (user_val <= 10)) {
         displayManager.brightness = user_val;
-        
-      }
-      else {
-        
+      } else {
         displayManager.brightness = 10;
-        
       }
       
       /// analogWrite(LCD_BL, scaleBrightness(displayManager.brightness)); 
       
-      if (bluetoothManager.sppConnected == 1) {
-             
+      if (bluetoothManager.sppConnected == 1) { 
         bluetoothManager.send("DBR:" + String(displayManager.brightness) + "^");
         
-        if (displayManager.autoBrightness == 1) {
-                  
+        if (displayManager.autoBrightness == 1) {      
           bluetoothManager.send("DBA:0^");
-          
         }
-        
-      }
-      else if (bluetoothManager.bleConnected == 1) {
-        
+      } else if (bluetoothManager.bleConnected == 1) {
         bluetoothManager.send("DBR:" + String(displayManager.brightness) + "^");
         
         if (displayManager.autoBrightness == 1) {
-        
           bluetoothManager.send("DBA:0^");
-          
-        }        
-        
+        }
       }
       
       displayManager.autoBrightness = 0;
-      
       return;
-      
     }
     /*
     else if (cmd.startsWith(F("PB:"))) { // NIGHT MODE SWITCH
@@ -507,134 +457,83 @@ void WifiManager::handleMessage(String cmd) {
       return;
       
     }
-    */
-    
+    */ 
   }
-  
 }
 
 String WifiManager::send(String raw) {
-
   raw = raw.trim();
   
   if (!raw.contains("AT+")) {
     raw = "AT+" + raw + "\r";
-  }
-  else {
+  } else {
     raw = raw + "\r";
   }
   
   wi.print(raw);
-  
   wi.flush();
-
   return "SENT";
 }
 
 String WifiManager::getResponse(int contentLength) {
-  
   // 0 = cmd, 1 = header, 2 = body
-  
   String buffer1 = F("");
-  
   char inByte;
   int rCount = 0;
   int nCount = 0;
   int curLength = 0;
    
   bool end = false;
-  
   wi.flush();
-  
   unsigned long st = millis();
 
   while (!end) {
-    
     if (wi.available()) {
-      
       inByte = wi.read();
-      
       curLength++;
 
       if (contentLength == 0) {
-        
         if ((inByte == '\n') && (rCount == 2) && (nCount == 1)) {
-          
           end = true;
-          
           int strLength = buffer1.length() - 3;
-          
           buffer1 = buffer1.substring(0, strLength);
-          
-        }
-        else if (inByte == '\r') {
-          
+        } else if (inByte == '\r') {
           rCount++;
-          
-        }
-        else if (inByte == '\n') {
-          
+        } else if (inByte == '\n') {
           nCount++;
-          
-        }
-        else {
-          
+        } else {
           rCount = 0;
-          
           nCount = 0;
-          
         }
-        
-      }
-      else if (curLength >= contentLength) {
-        
+      } else if (curLength >= contentLength) {
         end = true;
-        
       }
       
       buffer1 += inByte;
-      
-    }
-    else {
-      
+    } else {
       if ((millis() - st) > (5500)) {
-        
         break;
-        
       }
-      
     }
-    
   }
   
   if (contentLength != 0) {
-    
     if (wi.available()) {
-      
       unsigned long st = millis(); 
-      
       bool end = false;
       
       while (!end) {
-        
         while (wi.available()) {
-          
           wi.read();
-          
         }
         
         delay(50);
         
         if ((!wi.available()) || ((millis() - st) > 1000)) {
-          
           end = true;
-        
         }
-      
       }
-    
     }
-  
   }
 
   displayManager.debugPrint(buffer1);
@@ -642,100 +541,63 @@ String WifiManager::getResponse(int contentLength) {
 }
 
 String WifiManager::sendMessage(String msg, uint8_t timeout) {
-  
   // main.println("[sendMessage] " + msg);
-  
   wi.print(msg);
-  
   wi.flush();
-  
   return "SENT";
-  
 }
 
 void WifiManager::enterCommandMode() {
-  
   bool success = false;
-  
   int retries = 0;
-  
   int bothbaud = 0;
 
   do {
-    
     if (retries > 2) {
-      
       if (bothbaud == 0) {
-        
         wi.end();
-        
         wi.begin(9600);
-        
         retries = 0;
-        
         bothbaud = 1;
-        
-      }
-      else {
-        
+      } else {
         return;
-        
       }
-      
     }
     
     success = startATSequence();
-    
     retries += 1;
-    
   } while (!success);
 
   wi.print(F("a")); 
-  
   getResponse(0);
-  
   wi.print("AT+E\r");
-
   getResponse(0);
-  
 }
 
 boolean WifiManager::startATSequence() {
-  
   delay(50);
-  
   while (wi.available()) { wi.read(); }
-  
   wi.write("+++");
   
   unsigned long timeout = millis() + (4 * 1000);
   
   while (!wi.available()) {
-    
     delay(1);
-    
     if (millis() > timeout) {
-      
       return false;
-      
     }
-    
   }
   
   char resp = wi.read();
 
   if (resp == 'a') {
-    
     return true;
-    
   }
 
   return false;
-  
 }
 
 void WifiManager::config() {
-  
   //wi.print(F("AT+E\r"));
   //getResponse(0);
   //wi.print(F("AT+WSLK\r"));
@@ -772,7 +634,7 @@ void WifiManager::config() {
 
   //SET MODULE TO TCP CLIENT MODE
   //SET MODULE TO CONNECT TO OUR SERVER (glowdeck.com:80)
-  wi.print(F("AT+NETP=TCP,CLIENT,443,streams.io\r"));
+  wi.print(F("AT+NETP=TCP,CLIENT,443,glowdeck.com\r"));
   getResponse(0);  //CLEAR RESPONSE (Expecting: +ok)
 
   //SET MODULE TCP TIMEOUT TO 500MS
@@ -783,7 +645,7 @@ void WifiManager::config() {
   wi.print(F("AT+WMODE=APSTA\r"));
   getResponse(0);  //CLEAR RESPONSE (Expecting: +ok)
   
-  wi.print(F("AT+WSSSID=MyRouter\r")); // + tmp_name + F("\r"));
+  wi.print(F("AT+WSSSID=LucyInTheSky\r")); // + tmp_name + F("\r"));
   getResponse(0);
   
   wi.print(F("AT+TCPDISB=off\r")); 
@@ -833,29 +695,20 @@ void WifiManager::config() {
 }
 
 int WifiManager::wifiSetup() {
-  
   int result = 0; // 0 = DO NOT CONFIG, 1 = CONFIG, -1 = ERROR ENTERING CMD MODE
-  
   bool usr_success = false;  //E NTER CMD MODE RESULT FLAG (=TRUE IF SUCCESS)
-  
   int retries = 0;  // COUNTER FOR # OF FAILED ATTEMPTS TO INITIALIZE USR MODULE
-  
   int bothbaud = 0;  // =0 IF WE DID NOT TRY 115200 YET, =1 IF WEVE TRIED 115200
-  
   // char usr_done = '1';
 
   /*
   if (EEPROM.read(41) == usr_done) {
-    
     result = 1;
-    
     return result;
-    
   }
   */
   
   wi.begin(115200);
-  
   delay(5);
   
   // displayManager.printStream(F("starting wifi"), F(""));
@@ -863,56 +716,32 @@ int WifiManager::wifiSetup() {
   int startClock = millis();
   
   do {
-    
     if (retries > 3) {
-      
       if (bothbaud == 0) {
-        
-        main.println(F("USR Baud: 9600!"));
-        
-        wi.end(); 
-        
-        delay(5); 
-        
-        wi.begin(9600); 
-        
+        // main.println(F("USR Baud: 9600!"));
+        wi.end();
         delay(5);
-        
-        retries = 0; 
-        
-        bothbaud = 1; 
-        
+        wi.begin(9600);
+        delay(5);
+        retries = 0;
+        bothbaud = 1;
         result = 1;
-        
-      }
-      else {
-        
-        main.println(F("USR CMD Mode Fail!"));
-        
+      } else {
+        // main.println(F("USR CMD Mode Fail!"));
         wi.end(); 
-        
         result = -1;
-        
         return result;
-        
       }
-      
     }
     
     if (millis() - startClock > 6500) {
-      
       wi.end();
-      
       result = -1;
-      
       return result;
-      
     }
     
     usr_success = commandMode();
-    
     retries += 1;
-    
   } while (!usr_success);
 
   wi.print(F("a")); 
@@ -934,35 +763,24 @@ int WifiManager::wifiSetup() {
   while (wi.available()) { wi.read(); }    
   
   if (bothbaud != 1) {
-   
-    wi.print(F("AT+UART=9600,8,1,NONE,NFC\r")); 
- 
+    wi.print(F("AT+UART=9600,8,1,NONE,NFC\r"));
     delay(50);
- 
   }
   
   //while (wi.available()) { wi.read(); }
-  
   //baud_flag = '1'; EEPROM.write(167, baud_flag);
 
-  wi.print(F("AT+WIFI=DOWN\r")); 
-  
+  wi.print(F("AT+WIFI=DOWN\r"));
   delay(50);
-  
   wi.flush(); 
-  
-  wi.print(F("AT+Z\r")); 
-  
+  wi.print(F("AT+Z\r"));
   wi.end();
   
   // EEPROM.write(41, usr_done);
-  
   return result;
-  
 }
 
 boolean WifiManager::commandMode() {
-  
   //WAIT
   delay(75);  // WHAT DELAY IS NEEDED HERE IF ANY?
   

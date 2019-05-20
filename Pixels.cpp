@@ -1702,7 +1702,6 @@ void PixelsBase::scroll(int16_t dy, int16_t x1, int16_t x2, int8_t flags)
     }
 }
 
-
 void PixelsBase::drawPixel(int16_t x, int16_t y)
 {
 

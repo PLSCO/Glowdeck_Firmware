@@ -6,7 +6,6 @@
 //  Copyright © 2017 Justin Kaufman. All rights reserved.
 //
 
-
 #ifndef _CLICKQUEUE_H
 #define _CLICKQUEUE_H
 
