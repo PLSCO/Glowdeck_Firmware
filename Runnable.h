@@ -10,12 +10,10 @@
 #define _RUNNABLE_H
 
 class Runnable {
-
   static Runnable *headRunnable;
   Runnable *nextRunnable;
  
   public:
-  
     Runnable() {
       nextRunnable = headRunnable;
       headRunnable = this;
@@ -33,7 +31,6 @@ class Runnable {
       for (Runnable *r = headRunnable; r; r = r->nextRunnable)
         r->loop();
     }
-  
 };
 
 #endif

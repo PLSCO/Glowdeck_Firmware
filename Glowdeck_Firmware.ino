@@ -22,7 +22,7 @@ RightButton rightButton (RIGHT_BUTTON);
 
 GlowdeckManager glowdeckManager();
 BootloaderManager bootloaderManager();
-SerialManager serialManager(&Serial );
+SerialManager serialManager(&Serial);
 WifiManager wifiManager(&Serial1);
 BluetoothManager bluetoothManager(&Serial2);
 LEDManager ledManager(1);
